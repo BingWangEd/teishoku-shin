@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useReducer } from 'react';
 import './App.css';
 import useGeolocation from './useGeolocation';
+import useDataState from './useDataState';
+import axios from 'axios';
 
 function App() {
 	const [location] = useGeolocation()
+	const [dataState, fetchData] = useDataState(location)
 
 	console.log(`rendering app:${location.lat} ${location.log}`)
+
 	return (
 		<div className="App">
-      <button></button>
+      <button onClick={()=>fetchData()}>Show me some restaurants</button>
+			{(dataState.isLoading) && 
+				(<h1>Data is loading ... </h1>)
+			}
 		</div>
 	)
 }
