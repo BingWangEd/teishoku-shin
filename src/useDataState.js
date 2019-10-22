@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const initialState = {
 	isLoading: false,
-	posts: [],
+	data: [],
 	error: ''
 }
 
@@ -34,9 +34,10 @@ const reducer = (state, action) => {
 function useDataState(location) {
 	const [state, dispatch] = useReducer(reducer, initialState)
 
-	const fetchData = () => {
+	const fetchData = (location) => {
+		alert('fetching data')
 		const key='5a02b734aa0809483ce5cf236aad280e'
-		const inquiry = 'https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid='+key+'&latitude='+location.lat+'&longitude='+location.log+'&hit_per_page=3&range=5'
+		const inquiry = 'https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid='+key+'&latitude='+location.lat+'&longitude='+location.log+'&hit_per_page=3&range=1'
 		console.log(inquiry)
 		dispatch({type: 'isFetchingData'})
 		axios.get(inquiry)

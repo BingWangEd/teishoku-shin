@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
 import './App.css';
-import useGeolocation from './useGeolocation';
+import useGetTotalRest from './useGetTotalRest';
 import useDataState from './useDataState';
 import axios from 'axios';
 
 function App() {
-	const [location] = useGeolocation()
+	const [location] = useGetTotalRest()
 	const [dataState, fetchData] = useDataState(location)
 
 	console.log(`rendering app:${location.lat} ${location.log}`)
