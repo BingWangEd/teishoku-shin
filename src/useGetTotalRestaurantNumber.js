@@ -1,5 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
-import axios from 'axios';
+import { useReducer, useEffect } from 'react';
 import useGetLocation from './useGetLocation';
 import { fetchData } from './helper';
 
@@ -28,33 +27,26 @@ const reducer = (state, action) => {
 	}
 }
 
-const useGetTotalRestaurantNumberData = () => {
-	const [location] = useGetLocation()
+const useGetTotalRestaurantNumber = () => {
+	const [location, locationPromise] = useGetLocation()
 	const [state, dispatch] = useReducer(reducer, initialState)
 
 	useEffect(()=>{
+		const getRestaurantData = () => {
+			locationPromise.then((location) => {
+				const GnaviRestAPIKey = process.env.REACT_APP_GNAVI_REST_API_KEY;
+				const inquiry = `https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=${GnaviRestAPIKey}&latitude=${location.lat}&longitude=${location.log}&hit_per_page=${HIT_PER_PAGE}&range=${RANGE}`;
+				console.log(inquiry)
+				fetchData(inquiry, dispatch)
+			}).catch((message)=>{
+				console.log(message)
+			})
+		}
+
     getRestaurantData()
 	}, [location])
 
-	let locationPromise = new Promise((resolve, reject)=>{
-		if (location) {
-			resolve(location)
-		} else {
-			reject('Location is not here yet.')
-		}
-	})
-
-	const getRestaurantData = () => {
-		locationPromise.then((location) => {
-			const GnaviRestAPIKey = process.env.REACT_APP_GNAVI_REST_API_KEY;
-			const inquiry = `https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid=${GnaviRestAPIKey}&latitude=${location.lat}&longitude=${location.log}&hit_per_page=${HIT_PER_PAGE}&range=${RANGE}`;
-			fetchData(inquiry)
-		}).catch((message)=>{
-			console.log(message)
-		})
-	}
-
-	return [state, getRestaurantData]
+	return [state]
 }
 
-export default useGetTotalRestaurantNumberData;
+export default useGetTotalRestaurantNumber;

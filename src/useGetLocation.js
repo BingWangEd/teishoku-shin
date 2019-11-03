@@ -8,10 +8,20 @@ function useGetLocation() {
     navigator && navigator.geolocation && navigator.geolocation.getCurrentPosition((position) => {
     currLocation = { lat: position.coords.latitude, log: position.coords.longitude}
     setLocation(currLocation)
+    console.log('location is called')
   });
-	}, [])
+  }, [])
+  
+  const locationPromise = new Promise((resolve, reject)=>{
+		if (location) {
+      console.log('location:'+location)
+			resolve(location)
+		} else {
+			reject('Location is not here yet.')
+		}
+	})
 
-  return [location]
+  return [location, locationPromise]
 }
   
 export default useGetLocation;
